@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\AskQuestionRequest;
 class QuestionController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth',['except'=>['show','index'] ]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -91,13 +94,17 @@ class QuestionController extends Controller
     public function update(AskQuestionRequest $request, Question $question)
     {
         //
-        if(\Gate::allows('update-question',$question))
-        {
-            $question->update($request->only('title','body'));
+        // if(\Gate::allows('update-question',$question))
+        // {
+        //     $question->update($request->only('title','body'));
 
-            return redirect()->route('question.index')->with('success','your question has been updated');
-        }
-        abort(403,"Access Denied");  
+        //     return redirect()->route('question.index')->with('success','your question has been updated');
+        // }
+        // abort(403,"Access Denied"); 
+        
+        $this->authorize("update",$question);
+        $question->update($request->only('title','body'));
+        return redirect()->route('question.index')->with('success','your question has been updated');
     }
 
     /**
@@ -109,11 +116,15 @@ class QuestionController extends Controller
     public function destroy(Question $question)
     {
         //
-        if(\Gate::allows('delete-question',$question))
-        {
-            $question->delete();
-             return redirect()->route('question.index')->with('success','your question has been deleted'); 
-        }
-        abort(403,"Access Denied");       
+        // if(\Gate::allows('delete-question',$question))
+        // {
+        //     $question->delete();
+        //      return redirect()->route('question.index')->with('success','your question has been deleted'); 
+        // }
+        // abort(403,"Access Denied");   
+        
+        $this->authorize("delete",$question);
+        $question->delete();
+        return redirect()->route('question.index')->with('success','your question has been deleted'); 
     }
 }
