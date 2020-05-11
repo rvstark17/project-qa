@@ -24,7 +24,23 @@
                             </div>
                             <div class="media-body">
                                 {!! $answer->body_html !!}
-                                <div class="float-right">
+                                <div class="row">
+                                    <div class="col-4">
+                                        @can('update',$answer)
+                                            <a href="{{ route('question.answers.edit',[$question->id,$answer->id]) }}" class="btn btn-sm btn-outline-info">Edit</a>
+                                         @endcan
+                                         @can('delete',$answer)
+                                            <form class="form-delete" method="post" action="{{ route('question.answers.destroy',[$question->id,$answer->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('are you sure??')">Delete</button>
+                                            </form> 
+                                        @endcan
+                                       
+                                    </div>
+                                    <div class="col-4"> 
+                                    </div>
+                                    <div class="col-4">
                                     <span class="text-muted">Answered {{ $answer->created_date }}</span>
                                     <div class="media mt-2">
                                         <a href="{{ $answer->user->url }}" class="pr-2">
@@ -35,6 +51,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                </div>
+                                
                             </div>
                         </div>
                         <hr>
