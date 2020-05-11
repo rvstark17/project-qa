@@ -35,7 +35,8 @@
                                 <div class="d-flex align-items-center">
                                      <h3 class="mt-0"><a href="{{ $question->url }}">{{  $question->title }}</a></h3>
                                      <div class="ml-auto">
-                                         <!-- @if(Auth::user()->can('update-question',$question))
+                                         @if(@Auth::user()!=null)
+                                         @if(Auth::user()->can('update-question',$question))
                                             <a href="{{ route('question.edit',$question->id) }}" class="btn btn-sm btn-outline-info">Edit</a>
                                          @endif
                                          @if(Auth::user()->can('delete-question',$question))
@@ -44,17 +45,8 @@
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('are you sure??')">Delete</button>
                                             </form> 
-                                        @endif -->
-                                        @can('update',$question)
-                                            <a href="{{ route('question.edit',$question->id) }}" class="btn btn-sm btn-outline-info">Edit</a>
-                                        @endcan
-                                        @can('delete',$question)
-                                            <form class="form-delete" method="post" action="{{ route('question.destroy',$question->id) }}">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('are you sure??')">Delete</button>
-                                            </form> 
-                                        @endcan
+                                        @endif
+                                       @endif
                                      </div>
                                 </div>
                                 
