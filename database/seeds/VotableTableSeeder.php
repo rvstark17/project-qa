@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\User;
 use App\Question;
+use App\Answer;
 class VotableTableSeeder extends Seeder
 {
     /**
@@ -23,6 +24,15 @@ class VotableTableSeeder extends Seeder
             {
                 $u = $user[$i];
                 $u->voteQuestion($question,$votes[rand(0,1)]);
+            }
+        }
+
+        foreach(Answer::all() as $Answer)
+        {
+            for($i=0;$i<rand(1,$userCount);$i++)
+            {
+                $u = $user[$i];
+                $u->voteAnswer($Answer,$votes[rand(0,1)]);
             }
         }
     }
