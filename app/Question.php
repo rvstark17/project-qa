@@ -46,11 +46,11 @@ class Question extends Model
     }
     public function getBodyHtmlAttribute()
     {
-        return \Parsedown::instance()->text($this->body);
+        return clean(\Parsedown::instance()->text($this->body));
     }
     public function answers()
     {
-        return $this->hasMany(answer::class);
+        return $this->hasMany(answer::class)->orderBy('votes_count','DESC');
     }
     public function acceptBestAnswer(Answer $answer)
     {

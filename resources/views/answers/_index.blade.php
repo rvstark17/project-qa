@@ -1,3 +1,4 @@
+@if($answerCount>0)
 <div class="row mt-3">
         <div class="col-md-12">
             <div class="card">
@@ -9,38 +10,7 @@
                     @include('layouts._messages')
                     @foreach($answers as $answer)
                         <div class="media">
-                                <div class="d-flex-column vote-controls">
-                                    <a title="This answer is useful" 
-                                     class="vote-up {{ Auth::guest() ? 'off' : '' }}" onclick="event.preventDefault(); document.getElementById('vote-up-answer-{{ $answer->id }}').submit()" >
-                                        <i class="fa fa-caret-up fa-3x"></i>
-                                    </a>
-                                    <form id="vote-up-answer-{{ $answer->id }}"  action="/answer/{{ $answer->id }}/vote" method="post" style="display:none">
-                                        @csrf
-                                        <input type="hidded" name="vote" value="1">
-                                    </form>
-                                    <span class="votes-count">{{  $answer->votes_count }}</span>
-                                    <a title="This answer is not useful" class="vote-down {{ Auth::guest() ? 'off' : '' }}" onclick="event.preventDefault(); document.getElementById('vote-down-answer-{{ $answer->id }}').submit()">
-                                    <i class="fa fa-caret-down fa-3x"></i>
-                                    </a>
-                                    <form id="vote-down-answer-{{ $answer->id }}"  action="/answer/{{ $answer->id }}/vote" method="post" style="display:none">
-                                        @csrf
-                                        <input type="hidded" name="vote" value="-1">
-                                    </form>
-                                @can('accept',$answer)
-                                <a  title="Mark this question as best answer" class="{{ $answer->status }} mt-2" onclick="event.preventDefault(); document.getElementById('accept-answer-{{ $answer->id }}').submit()">
-                                <i class="fa fa-check fa-2x"></i>
-                                </a>
-                                <form id="accept-answer-{{ $answer->id }}"  action="{{  route('answers.accept',$answer->id)}}" method="post" style="display:none">
-                                    @csrf
-                                </form>
-                                @else
-                                    @if($answer->is_best)
-                                    <a  title="The question accepted as best answer" class="vote-accept mt-2" >
-                                    <i class="fa fa-check fa-2x"></i>
-                                    </a>
-                                    @endif
-                                @endcan
-                            </div>
+                                @include('shared._vote',['model'=>$answer])
                             <div class="media-body">
                                 {!! $answer->body_html !!}
                                 <div class="row">
@@ -60,16 +30,8 @@
                                     <div class="col-4"> 
                                     </div>
                                     <div class="col-4">
-                                    <span class="text-muted">Answered {{ $answer->created_date }}</span>
-                                    <div class="media mt-2">
-                                        <a href="{{ $answer->user->url }}" class="pr-2">
-                                            <img src="{{ $answer->user->avatar }}">
-                                        </a>
-                                        <div class="media-body mt-1">
-                                            <a href="{{ $answer->user->url }}">{{ $answer->user->name }}</a>
-                                        </div>
+                                        @include('shared._author',['model'=>$answer,'label'=>'answered'])
                                     </div>
-                                </div>
                                 </div>
                                 
                             </div>
@@ -80,3 +42,4 @@
             </div>
         </div>
     </div>
+    @endif
